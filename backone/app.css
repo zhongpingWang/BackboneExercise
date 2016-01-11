@@ -1,0 +1,38 @@
+body,html,ul{
+	margin:0PX;
+	padding:0px;
+}
+
+.pageComm{
+	width:1000px;
+	margin:0 auto;
+} 
+ 
+.navBox ul{
+	border:1px #ccc solid;
+	border-radius:3px;
+	height: 100%;
+	line-height: 50px;
+	height:50px;
+	background-color: #756161;
+	padding-left: 58px;
+}
+
+.navBox li{
+	float:left;
+	list-style-type: none;
+}
+.navBox li a{
+	text-decoration: none;
+	color:#fff;
+	display: inline-block;
+	width:220px;
+	text-align: center;
+
+}
+.navBox li a:hover{
+	background-color: #965E4E;
+}
+.navBox li a.selected{
+	background-color: #000;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Backbone Route</title>
+ 
+  <script src="./Backbone.js Todos_files/json2.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.js"></script>
+  <script src="./Backbone.js Todos_files/underscore.js"></script>
+  <script src="./Backbone.js Todos_files/backbone.js"></script> 
+</head>
+<body>
+	
+	<div id="index">
+		index
+	</div>
+
+<div id="list">list</div>
+
+
+
+<script type="text/javascript" >
+	
+ var Router = Backbone.Router.extend({
+        routes: {
+            '': 'index',
+            'index': 'index',
+            'list': 'list'
+        },
+
+      	index:function(){
+      		console.log("index");
+      	},
+      	list:function(){
+      		console.log("list");
+      	}
+    })
+
+new Router();
+
+Backbone.history.start();
+</script>
+
+</body>
+</html>

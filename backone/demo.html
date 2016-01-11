@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+ 
+	<title>Backbone test</title>
+ 
+</head>
+<body>
+  <button onclick="add();">add</button>
+  <div id="divTip"></div>  
+
+
+  <script src="./Backbone.js Todos_files/json2.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.js"></script>
+  <script src="./Backbone.js Todos_files/underscore.js"></script>
+  <script src="./Backbone.js Todos_files/backbone.js"></script> 
+  
+
+
+ <script type="text/javascript">
+		 // 定义模型类  
+      var Task = Backbone.Model.extend({
+ 
+          defaults: {
+             name: "" 
+          },
+
+          parse:function(){
+          	 return {name:+new Date()}
+          }
+ 
+        }); 
+
+        // 创建集合模型类  
+       var TaskList = Backbone.Collection.extend({ 
+      	  
+			parse:function(model,options){
+				 //fetch 会经过
+				return [{name:'zz'},{name:'pp'}];
+			}, 
+
+      	 	model:Task 
+   
+            
+        });
+
+
+        // 向模型添加数据  
+        var Tasks = new TaskList
+
+
+        // 创建View对象  
+        var TaskView = Backbone.View.extend({
+
+            el: $("#divTip"), 
+
+            initialize: function() { 
+                //  this.listenTo(this.model, 'change', this.render);
+      			// this.listenTo(this.model, 'destroy', this.remove);
+      			// this.listenTo(this.model, 'add', this.add);   
+  			   this.listenTo(Tasks, 'add', this.addOne);
+		       this.listenTo(Tasks, 'reset', this.addAll); 
+		       //获取数据
+		       Tasks.fetch({url:'http://www.geonames.org/postalCodeLookupJSON?postalcode=10504&country=US&callback=?'});
+
+            },  
+
+            addAll:function(modules,options){
+            	$("#divTip").empty();
+            	Tasks.each(this.addOne, this); 
+            },  
+
+
+            render:function(){
+            	console.log('render');
+            },
+            remove:function(){
+            	console.log('remove');
+            },
+            addOne:function(model,collection){ 
+            
+              var view = new TaskItem({model: model});
+              this.$el.append(view.render().el);
+            	//this.render();
+            	console.log('add');
+
+            },
+
+            events: {
+			   "click":"clickFn"
+			},
+
+		    clickFn:function(){
+		    	console.log(1);
+		    } 
+
+
+        });
+
+
+var TaskItem=Backbone.View.extend({
+
+  	   tagName:"div",
+
+	   events:{
+		   "click .say":"divClick"
+	   },
+
+	  divClick:function(){
+	  	this.model.set({"name":+new Date()});
+	  	//this.model.destroy(); //删除模型中的数据
+	  	console.log('divClick'); 
+	  },
+
+   	 initialize: function() {
+      this.listenTo(this.model, 'change', this.render);
+      this.listenTo(this.model, 'destroy', this.removeItem);
+ 	},
+
+    render:function(){
+      this.$el.html('<div class="say">'+ this.model.toJSON().name+'</div>');//this.$el.html(this.template(this.model.toJSON()));  
+      return this;
+    },
+
+    removeItem:function(){
+      this.$el.fadeOut();
+      //this.remove();
+    	console.log('remove');
+    },
+     // Remove the item, destroy the model.
+    clear: function() {
+      this.model.destroy();
+    }
+
+
+});
+
+
+        //实例化View对象  
+  //var App = new TaskView; 
+
+
+
+var index=1;
+    function add(){
+		Tasks.create({name:index});
+		index++;
+    }
+
+   //    Tasks.models[0].set("name",5)
+
+ 
+
+
+        </script>
+
+<div id="content"></div>
+
+<script  type="text/javascript">
+	
+	//定义视图
+var AppView = Backbone.View.extend({
+
+    tagName: "Div",
+
+    events: {
+
+        "click .btnSearch": "onbtnSearchClick"
+
+    },
+
+    initialize: function() { 
+       this.listenTo(this.model, 'change', this.ondataChange);
+        //this.model.on("change", this.ondataChange);
+
+    },
+    render: function() {
+        var template = '<input type ="button"  value="'+this.model.toJSON()+'" id="btnSearch" class="btnSearch">';
+        var html =this.model.toJSON().btnname;
+        this.$el.html(template); 
+        $("#content").empty().append(this.el);
+        this.delegateEvents();
+    },
+
+    ondataChange: function() {
+        this.render();
+    },
+    onbtnSearchClick: function() {
+        alert("按钮事件");
+    }
+
+})
+//定义model
+var MyModel = Backbone.Model.extend({
+	defaults:{
+		btnname:"ts"
+	},
+    initialize: function() {}
+}) 
+
+$(function() {
+    window.myModel = new MyModel;
+    window.appView = new AppView({
+        model : myModel
+    });
+    appView.render();
+
+})
+
+//单击按钮 改变model
+function BtnCLick() {
+    var name = Math.random();
+    window.myModel.set({btnname: name});
+}
+</script>
+ 
+
+</body>
+</html>
